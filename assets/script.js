@@ -6,6 +6,8 @@ var tempEl = document.querySelector("#temp");
 var windEl = document.querySelector("#wind");
 var humidityEl = document.querySelector("#humidity");
 var cityEl = document.querySelector("#city-name");
+var longitude;
+var latitude;
 
 function getAPI() {
   city = cityInputEl.value;
@@ -27,8 +29,32 @@ function getAPI() {
         windEl.textContent = data.wind.speed + "MPH";
         humidityEl.textContent = data.main.humidity + "%";
         cityEl.textContent = data.name;
+        latitude = data.coord.lat;
+        longitude = data.coord.lon;
+        console.log(latitude);
+        console.log(longitude);
       }
     });
 }
 
+//This Function retrieves the latitude and longitude for whichever city the user inputs.
+function forecast() {
+  city = cityInputEl.value;
+  console.log(city);
+
+  var forecastURL = `api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${APIKey}
+  `;
+
+  fetch(forecastURL)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      latitude = data.lat;
+      console.log(latitude);
+    });
+}
+
 searchBtn.addEventListener("click", getAPI);
+searchBtn.addEventListener("click", forecast);

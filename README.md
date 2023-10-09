@@ -9,3 +9,5 @@ Module 6 - Creating a web application that takes multiple cities and displays th
 - https://openweathermap.org/forecast5
 - https://openweathermap.org/current#name
 - https://coding-boot-camp.github.io/full-stack/apis/how-to-use-api-keys
+- https://openweathermap.org/forecast5
+- https://openweathermap.org/api/geocoding-api#direct
