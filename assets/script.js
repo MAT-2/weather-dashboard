@@ -8,6 +8,9 @@ var humidityEl = document.querySelector("#humidity");
 var cityEl = document.querySelector("#city-name");
 var longitude;
 var latitude;
+temp1El = document.querySelector("#temp1");
+
+forecast();
 
 function getAPI() {
   city = cityInputEl.value;
@@ -16,7 +19,6 @@ function getAPI() {
   //JS Injection example shown here, concatenating strings in JS.
 
   var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}&units=imperial`;
-
   var forecastURL = `api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${APIKey}`;
 
   //Need to fetch the data from queryURL. THEN return it as JS. THEN return data to be used.
@@ -31,7 +33,7 @@ function getAPI() {
         windEl.textContent = data.wind.speed + "MPH";
         humidityEl.textContent = data.main.humidity + "%";
         cityEl.textContent = data.name;
-
+        temp1El.textContent = weatherData.latitude;
         var weatherData = {
           latitude: data.coord.lat,
           longitude: data.coord.lon,
@@ -39,26 +41,28 @@ function getAPI() {
         localStorage.setItem("weatherData", JSON.stringify(weatherData));
       }
     });
+
+  fetch(forecastURL)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+    });
 }
 
 //This Function retrieves the latitude and longitude for whichever city the user inputs.
-// function forecast() {
-//   city = cityInputEl.value;
-//   console.log(city);
+function forecast() {
+  var storedData = localStorage.getItem("weatherData");
 
-//   var forecastURL = `api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${APIKey}
-//   `;
-
-//   fetch(forecastURL)
-//     .then(function (response) {
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       console.log(data);
-//       latitude = data.lat;
-//       console.log(latitude);
-//     });
-// }
+  if (storedData) {
+    var weatherData = JSON.parse(storedData);
+    latitude = weatherData.latitude;
+    longitude = weatherData.longitude;
+    var forecastURL = `api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${APIKey}`;
+    console.log(forecastURL);
+  }
+}
 
 searchBtn.addEventListener("click", getAPI);
-// searchBtn.addEventListener("click", forecast);
+searchBtn.addEventListener("click", forecast);
