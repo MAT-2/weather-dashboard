@@ -17,6 +17,8 @@ function getAPI() {
 
   var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}&units=imperial`;
 
+  var forecastURL = `api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${APIKey}`;
+
   //Need to fetch the data from queryURL. THEN return it as JS. THEN return data to be used.
   fetch(queryURL)
     .then(function (response) {
@@ -29,32 +31,34 @@ function getAPI() {
         windEl.textContent = data.wind.speed + "MPH";
         humidityEl.textContent = data.main.humidity + "%";
         cityEl.textContent = data.name;
-        latitude = data.coord.lat;
-        longitude = data.coord.lon;
-        console.log(latitude);
-        console.log(longitude);
+
+        var weatherData = {
+          latitude: data.coord.lat,
+          longitude: data.coord.lon,
+        };
+        localStorage.setItem("weatherData", JSON.stringify(weatherData));
       }
     });
 }
 
 //This Function retrieves the latitude and longitude for whichever city the user inputs.
-function forecast() {
-  city = cityInputEl.value;
-  console.log(city);
+// function forecast() {
+//   city = cityInputEl.value;
+//   console.log(city);
 
-  var forecastURL = `api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${APIKey}
-  `;
+//   var forecastURL = `api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${APIKey}
+//   `;
 
-  fetch(forecastURL)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      console.log(data);
-      latitude = data.lat;
-      console.log(latitude);
-    });
-}
+//   fetch(forecastURL)
+//     .then(function (response) {
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       console.log(data);
+//       latitude = data.lat;
+//       console.log(latitude);
+//     });
+// }
 
 searchBtn.addEventListener("click", getAPI);
-searchBtn.addEventListener("click", forecast);
+// searchBtn.addEventListener("click", forecast);
